@@ -26,28 +26,18 @@ def driver():
 def test_fluxo_compra_completo(driver):
     wait = WebDriverWait(driver, 20)
     driver.get("https://www.saucedemo.com/")
-    
     LoginPage(driver).login("standard_user", "secret_sauce")
-    
-    # Adicionar ao carrinho
     btn_add = wait.until(EC.element_to_be_clickable((By.ID, "add-to-cart-sauce-labs-backpack")))
-    driver.execute_script("arguments[0].click();", btn_add) # Clique via JS (mais forte)
-    
-    # Navegação direta para o Checkout (evita erros de transição de tela)
+    driver.execute_script("arguments[0].click();", btn_add)
     driver.get("https://www.saucedemo.com/checkout-step-one.html")
-    
-    # Preenchimento
     wait.until(EC.visibility_of_element_located((By.ID, "first-name"))).send_keys("Tester")
     driver.find_element(By.ID, "last-name").send_keys("QA")
     driver.find_element(By.ID, "postal-code").send_keys("12345")
-    
     btn_cont = driver.find_element(By.ID, "continue")
     driver.execute_script("arguments[0].click();", btn_cont)
-    
-    # Finalização
+    wait.until(EC.url_contains("checkout-step-two.html"))
     btn_finish = wait.until(EC.element_to_be_clickable((By.ID, "finish")))
     driver.execute_script("arguments[0].click();", btn_finish)
-    
     wait.until(EC.url_contains("checkout-complete"))
     assert "checkout-complete" in driver.current_url
 
