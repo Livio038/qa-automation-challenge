@@ -1,24 +1,60 @@
 name: QA Automation Pipeline
 
-on: [push, pull_request]
+on:
+  push:
+    branches:
+      - main
+      - master
+  pull_request:
+    branches:
+      - main
+      - master
+  workflow_dispatch:
 
 jobs:
-  test:
+  api-tests:
+    name: API Tests - Swagger Petstore
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v3
-      
-      - name: Set up Python
-        uses: actions/setup-python@v4
+      - name: Baixar código
+        uses: actions/checkout@v4
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
         with:
-          python-version: '3.9'
+          python-version: "3.11"
 
-      - name: Install dependencies
+      - name: Instalar dependências
         run: |
-          pip install requests pytest selenium webdriver-manager
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
 
-      - name: Run API Tests
+      - name: Executar testes de API
         run: pytest api_tests/tests/
 
-      - name: Run Web Tests
+  web-tests:
+    name: Web Tests - SauceDemo
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Baixar código
+        uses: actions/checkout@v4
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Instalar Google Chrome
+        uses: browser-actions/setup-chrome@v1
+
+      - name: Instalar dependências
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Executar testes Web
+        env:
+          HEADLESS: "true"
         run: pytest web_tests/tests/
