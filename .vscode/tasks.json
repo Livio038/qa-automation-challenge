@@ -1,0 +1,23 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Rodar todos os testes",
+      "type": "shell",
+      "command": "pytest",
+      "problemMatcher": []
+    },
+    {
+      "label": "Rodar API",
+      "type": "shell",
+      "command": "pytest api_tests/tests -m api",
+      "problemMatcher": []
+    },
+    {
+      "label": "Rodar Web",
+      "type": "shell",
+      "command": "pytest web_tests/tests -m web",
+      "problemMatcher": []
+    }
+  ]
+}

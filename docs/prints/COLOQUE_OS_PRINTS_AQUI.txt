@@ -1,1 +1,0 @@
-Coloque aqui os prints com estes nomes: execucao-local.png, pipeline-github-actions.png, relatorio-testes.png, estrutura-vscode.png

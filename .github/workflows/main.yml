@@ -2,13 +2,9 @@ name: QA Automation Pipeline
 
 on:
   push:
-    branches:
-      - main
-      - master
+    branches: ["main", "master"]
   pull_request:
-    branches:
-      - main
-      - master
+    branches: ["main", "master"]
   workflow_dispatch:
 
 jobs:
@@ -31,7 +27,14 @@ jobs:
           pip install -r requirements.txt
 
       - name: Executar testes de API
-        run: pytest api_tests/tests/
+        run: pytest api_tests/tests -m api --html=reports/api-report.html --self-contained-html
+
+      - name: Publicar relatório API
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: api-report
+          path: reports/api-report.html
 
   web-tests:
     name: Web Tests - SauceDemo
@@ -57,4 +60,11 @@ jobs:
       - name: Executar testes Web
         env:
           HEADLESS: "true"
-        run: pytest web_tests/tests/
+        run: pytest web_tests/tests -m web --html=reports/web-report.html --self-contained-html
+
+      - name: Publicar relatório Web
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: web-report
+          path: reports/web-report.html
