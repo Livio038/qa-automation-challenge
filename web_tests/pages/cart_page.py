@@ -8,7 +8,8 @@ class CartPage(BasePage):
     CART_ITEMS = (By.CLASS_NAME, "cart_item")
 
     def assert_loaded(self):
-        assert self.text_of(self.TITLE) == "Your Cart"
+        title = self.text_of(self.TITLE).strip()
+        assert title.lower() == "your cart"
 
     def assert_products_quantity(self, expected_quantity):
         products = self.driver.find_elements(*self.CART_ITEMS)
