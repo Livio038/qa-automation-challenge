@@ -1,5 +1,7 @@
 import pytest
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 from web_tests.utils.driver_factory import create_driver
 from web_tests.pages.login_page import LoginPage
 from web_tests.pages.inventory_page import InventoryPage
@@ -71,7 +73,9 @@ def test_add_and_remove_product_from_cart(driver):
     assert inventory_page.cart_quantity() == "1"
 
     inventory_page.remove_backpack()
-    assert len(driver.find_elements(By.CLASS_NAME, "shopping_cart_badge")) == 0
+    WebDriverWait(driver, 10).until(
+    EC.invisibility_of_element_located((By.CLASS_NAME, "shopping_cart_badge"))
+)
 
 
 @pytest.mark.web
